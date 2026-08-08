@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+.venv
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+.windows-build-tools/
+
+# Streamlit
+.streamlit/cache/
+.streamlit/lib/
+.streamlit/streamlit_analytics.json
+.streamlit/logs/
+
+# Project-specific
+*.log
+temp/
+tmp/
+*.bak
+*.swp
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution
+*.zip
+*.tar.gz
