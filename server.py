@@ -105,6 +105,10 @@ Frameworks and tools:
 Flask, Streamlit, OpenCV, SQLite, MySQL, Tailwind CSS, DaisyUI, Google Gemini API, Git, GitHub, PyCharm, VS Code, and Blender.
 
 Projects:
+- Crowd Intelligence (GrandPrixGeekRoom): Real-time crowd simulation, bottleneck forecasting, and automated rerouting for venue crowd management.
+- Speech Emotion Recognition (CodeAlpha_Speech_Recoginition): RAVDESS-based deep learning project with acoustic features, microphone recording, FastAPI, and Streamlit.
+- Explainable Credit Scoring (CodeAlpha_Credit_Scoring_Model): German Credit dataset, Random Forest, SHAP explanations, FastAPI, and Streamlit.
+- Disease Prediction (CodeAlpha_Disease_Prediction_Model): An internship ML project with a React/Vite UI and Python/FastAPI backend serving predictive models.
 - AI Portfolio Website with Gemini AI Assistant
 - College Connect
 - Sanraksh Cybersecurity Platform
@@ -118,7 +122,7 @@ Projects:
 Achievements and participation:
 - IEEE Decode Dilemma Finalist — 4th Place
 - Team Captain
-- Top 40 HackVortex Finalist
+- HackVortex Finalist, selected for the offline round
 - Smart India Hackathon College Selection
 - Bharatiya Antariksh Hackathon Participant
 - BVP Hex Hackathon Participant

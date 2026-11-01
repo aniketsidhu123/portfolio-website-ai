@@ -1,168 +1,68 @@
-# 🚀 Aniket Sidhu — AI/ML Engineer Portfolio
+# Aniket Sidhu — Editorial Portfolio
 
-A premium, futuristic portfolio website built with **HTML/CSS/JavaScript** and a **Flask** backend, featuring a dark cybernetic design, animated neural-network particles, scroll-reveal animations, and an intelligent **Google Gemini AI Assistant**.
+A local redesign of the existing AI portfolio, closely following the visual direction of [ECHO by Jishnu Mondal](https://github.com/Jishnu09-siuu/ECHO-WEBSITE). Built with semantic HTML, CSS, and vanilla JavaScript, retaining the existing Flask / Gemini backend.
 
-![Version](https://img.shields.io/badge/version-2.0-blue)
-![Python](https://img.shields.io/badge/python-3.11+-green)
-![License](https://img.shields.io/badge/license-MIT-green)
+## Preview locally
 
----
+No frontend dependencies or build step are required. With Node.js installed:
 
-## ✨ Features
-
-### 🎨 Futuristic Design
-- **Dark cybernetic interface** with vibrant cyan, purple, and magenta accents
-- **Animated neural-network canvas** in the hero section
-- **Glassmorphism cards** with subtle glow effects
-- **Scroll-reveal animations** using IntersectionObserver
-- **Responsive** — fully optimized for desktop, tablet, and mobile
-- **Accessibility** — respects `prefers-reduced-motion`
-
-### 🤖 AI Assistant
-- **Gemini-powered** real-time chat
-- Uses verified profile data for accurate first-person responses
-- Suggested quick questions
-- Requires backend server for API proxying
-
-### 💼 8 Professional Sections
-- **Hero** — Animated gradient name, neural-network visual, social links
-- **About** — Professional bio with focus-area cards
-- **Skills** — Categorized tech tags (no fake percentages)
-- **Projects** — Featured project + 6-card grid with real GitHub links
-- **Experience** — Education timeline and certifications
-- **Achievements** — Hackathon milestones with numbered cards
-- **Creative Tech** — 3D/Blender showcase
-- **Contact** — Formspree-powered form + social links
-
----
-
-## 🛠️ Tech Stack
-
-| Component | Technology |
-|-----------|-----------|
-| **Frontend** | HTML5, CSS3, JavaScript (vanilla) |
-| **Backend** | Flask (Python) |
-| **AI / Prototyping** | Google Gemini API, Streamlit, OpenCV |
-| **Forms** | Formspree |
-| **Fonts** | Inter, Space Grotesk, JetBrains Mono |
-| **Icons** | Inline SVG Vectors |
-
----
-
-## 📋 File Structure
-
-```
-├── index.html          — Single-page portfolio website
-├── styles.css          — Complete design system
-├── script.js           — Particles, scroll-reveal, navbar, chat
-├── server.py           — Flask backend (static files + Gemini proxy)
-├── requirements.txt    — Python dependencies
-├── .streamlit/         — API key configuration
-│   ├── secrets.toml          — Your API keys (git-ignored)
-│   └── secrets.toml.example  — Template
-├── .gitignore          — Git configuration
-└── README.md           — This file
+```sh
+node preview.mjs
 ```
 
----
+Open http://127.0.0.1:4173. The preview binds only to loopback and serves an explicit list of public files. It does not send contact messages or connect to Gemini; those controls display an unavailable message. Stop with Ctrl+C. Set `PORT` to change the preview port.
 
-## 🚀 Quick Start
+For the existing full backend, use Python 3.11+:
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/aniketsidhu123/portfolio-website-ai.git
-cd portfolio-website-ai
-```
-
-### 2. Create Virtual Environment
-
-```bash
-python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # Mac/Linux
-```
-
-### 3. Install Dependencies
-
-```bash
+```sh
+python -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-### 4. Configure API Keys
-
-Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml`:
-
-```toml
-GEMINI_API_KEY = "your-gemini-api-key"
-FORMSPREE_ENDPOINT = "https://formspree.io/f/your-form-id"
-```
-
-- Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com)
-- Create a free form at [formspree.io](https://formspree.io) (optional)
-
-### 5. Run the Server
-
-```bash
 python server.py
 ```
 
-Open **http://localhost:5000** in your browser.
+Open http://localhost:5000. Configure `GEMINI_API_KEY` and `FORMSPREE_ENDPOINT` as environment variables or in the existing ignored `.streamlit/secrets.toml`. Never commit secrets. The original Gemini model and API integration remain in `server.py`.
 
-### Alternative: Static Only (No AI Chat)
+## Design and interactions
 
-You can open `index.html` directly in a browser. Everything works except the AI chat (which requires the Flask server).
+- Monochrome editorial layout, Plus Jakarta Sans, oversized metallic typography, and the user's GitHub avatar.
+- First-visit orbital introduction with a session-level dismissal.
+- Scroll-expanding about artwork and a horizontal education / learning journey.
+- Six-project cylindrical 3D reel: vertical mouse drag, horizontal touch swipe, arrow buttons, and keyboard navigation. Wheel navigation is enabled when the reel itself is focused.
+- Accessible native project dialogs with repository links, Escape dismissal, focus containment, and focus restoration.
+- Expanding lab panels, native skill accordions, project archive, achievements, AI assistant, and contact form.
+- Mobile layouts and reduced-motion alternatives. Ordinary page scrolling is preserved.
 
----
+The reel uses CSS 3D transforms instead of an external WebGL dependency. Lab panels use CSS expansion rather than ECHO's OGL liquid shader. Project covers are original abstract illustrations, not screenshots of the applications. No third-party portrait or project work is presented as Aniket's.
 
-## 🌐 Deployment
+## Content
 
-### GitHub Pages (Static Frontend)
+`projects.js` contains the six selected projects and their public GitHub repository paths. Descriptions were checked against the user's public repositories on November 1, 2026. The project archive preserves College Connect, Sanraksh, CZero, and Bins2Bucks from the original portfolio.
 
-1. Push code to GitHub
-2. Go to **Settings → Pages**
-3. Set source to `main` branch, root directory
-4. Your site will be live at `https://username.github.io/repo-name`
+The existing bio, education, contact links, certification, and achievements are retained. The original frontend and assistant disagreed on the HackVortex finalist count, so both now say **Finalist** without an unverified ranking. The assistant profile includes the new selected projects.
 
-> Note: AI chat requires a separate backend deployment (e.g., Render, Railway, or Streamlit Cloud).
+Replace `assets/aniket-github.png` with a portrait and update the image alt text to personalize the hero later. The current asset is the user's public GitHub identicon, styled in grayscale.
 
-### Full Deployment (with AI Chat)
+## Files
 
-Deploy on any Python-friendly platform:
-- [Render](https://render.com) — free tier available
-- [Railway](https://railway.app)
-- [Fly.io](https://fly.io)
+- `index.html` — page structure and personal content
+- `styles.css` — responsive design and motion fallbacks
+- `projects.js` — selected project metadata
+- `script.js` — interactions, chat, and contact behavior
+- `assets/` — public avatar and favicon
+- `server.py` — original Flask backend, with updated project context
+- `preview.mjs` — dependency-free local frontend preview
 
-Set environment variables: `GEMINI_API_KEY`, `FORMSPREE_ENDPOINT`
+## Checks
 
----
+```sh
+node --check script.js
+node --check projects.js
+node --check preview.mjs
+```
 
-## 🔐 Security
+If npm is available, `npm run check` runs these together and `npm start` starts the preview.
 
-- ✅ API keys stored in `.streamlit/secrets.toml` (git-ignored)
-- ✅ `.gitignore` prevents accidental exposure
-- ✅ Safe to share repository publicly
+## Design reference
 
----
-
-## 👤 Author
-
-**Aniket Sidhu**
-- 🎓 BTech Information Technology, MSIT (GGSIPU)
-- 🤖 Aspiring AI Engineer & Full-Stack Developer
-- 📍 New Delhi, India
-
-### Connect
-- [GitHub](https://github.com/aniketsidhu123)
-- [LinkedIn](https://linkedin.com/in/aniket-sidhu-93a823316)
-- [Email](mailto:aniketsidhu425@gmail.com)
-
----
-
-## 📄 License
-
-MIT License — free to use, modify, and distribute.
-
----
-
-**Built with curiosity and code 🚀✨**
+Visual direction: [ECHO — Editorial Developer & Designer Portfolio](https://github.com/Jishnu09-siuu/ECHO-WEBSITE), by Jishnu Mondal. This implementation adapts its design language and interaction ideas with original frontend code and Aniket's content. All changes are prepared locally; nothing has been deployed or pushed.
