@@ -4,6 +4,19 @@ A local redesign of the existing AI portfolio, closely following the visual dire
 
 ## Preview locally
 
+### Windows shortcuts
+
+1. Install Python 3.11+ with the Python launcher or Python on PATH.
+2. Double-click `setup.bat` to create `.venv` and install dependencies.
+3. Optionally configure `.streamlit/secrets.toml` for Gemini and Formspree. Setup preserves existing settings and creates empty settings only when the file is missing.
+4. Double-click `run.bat`, then open http://127.0.0.1:5000. Keep the terminal open; press Ctrl+C to stop.
+
+Both scripts work from any current directory. Setup reuses a working environment and backs up an unusable one inside the project before recreating it. No Node.js installation is needed for this full-backend option. The launcher binds to this computer only, with debugging and automatic reload disabled.
+
+For terminal use, `setup.bat --no-pause` and `run.bat --no-pause` skip the final keypress. `run.bat --check --no-pause` checks Python and dependencies without starting the server.
+
+### Frontend-only preview
+
 No frontend dependencies or build step are required. With Node.js installed:
 
 ```sh
