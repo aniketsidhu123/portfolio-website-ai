@@ -50,9 +50,9 @@ The reel uses CSS 3D transforms instead of an external WebGL dependency. Lab pan
 
 ## Content
 
-`projects.js` contains the six selected projects and their public GitHub repository paths. Descriptions were checked against the user's public repositories on November 1, 2026. The project archive preserves College Connect, Sanraksh, CZero, and Bins2Bucks from the original portfolio.
+The visible portfolio content and assistant profile are updated from Aniket's current resume. The six featured projects, education, CodeAlpha internship, skills, achievements, and certifications reflect that document. Team projects are labeled as collaborative work. The archive lists the additional projects included on the resume.
 
-The existing bio, education, contact links, certification, and achievements are retained. The original frontend and assistant disagreed on the HackVortex finalist count, so both now say **Finalist** without an unverified ranking. The assistant profile includes the new selected projects.
+The public GitHub identicon is used for the hero image. The resume's phone number is not published on the site; the existing public email and LinkedIn links remain available.
 
 Replace `assets/aniket-github.png` with a portrait and update the image alt text to personalize the hero later. The current asset is the user's public GitHub identicon, styled in grayscale.
 

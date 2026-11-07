@@ -4,6 +4,64 @@
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = matchMedia('(max-width: 760px)');
   document.documentElement.classList.add('js');
+  /* Fine-grained starfield, intentionally kept on one small, capped canvas. */
+  const sky = $('hero-particles');
+  if (sky && !motion.matches) {
+    const ctx = sky.getContext('2d', { alpha: true });
+    let particles = [];
+    let frame = 0;
+    let width = 0;
+    let height = 0;
+    let ratio = 1;
+    function resizeSky() {
+      const box = sky.getBoundingClientRect();
+      ratio = Math.min(devicePixelRatio || 1, 1.5);
+      width = box.width;
+      height = box.height;
+      sky.width = Math.round(width * ratio);
+      sky.height = Math.round(height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      const count = Math.min(110, Math.ceil(width * height / 8800));
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width, y: Math.random() * height,
+        r: .45 + Math.random() * 1.1, phase: Math.random() * 6.28,
+        speed: .003 + Math.random() * .009, hue: Math.random() > .82 ? 245 : 195
+      }));
+    }
+    function drawSky(now) {
+      frame = 0;
+      ctx.clearRect(0, 0, width, height);
+      const centerX = width * .5;
+      const centerY = height * .52;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const flicker = .24 + (Math.sin(now * p.speed + p.phase) + 1) * .27;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue},95%,78%,${flicker})`;
+        ctx.fill();
+        const dx = p.x - centerX;
+        const dy = p.y - centerY;
+        if (dx * dx + dy * dy < 18500) {
+          ctx.beginPath(); ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x - dx * .085, p.y - dy * .085);
+          ctx.strokeStyle = `hsla(${p.hue},85%,70%,${flicker * .14})`;
+          ctx.lineWidth = .7; ctx.stroke();
+        }
+      }
+      if (!document.hidden) frame = requestAnimationFrame(drawSky);
+    }
+    const skyObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !document.hidden && !frame) frame = requestAnimationFrame(drawSky);
+      else if (!entry.isIntersecting && frame) { cancelAnimationFrame(frame); frame = 0; }
+    }, { threshold: 0 });
+    resizeSky(); skyObserver.observe(sky);
+    addEventListener('resize', resizeSky, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && frame) { cancelAnimationFrame(frame); frame = 0; }
+      else if (!document.hidden && !frame && sky.getBoundingClientRect().bottom > 0) frame = requestAnimationFrame(drawSky);
+    });
+  } else if (sky) sky.hidden = true;
   try {
     if (sessionStorage.getItem('portfolio-intro')) document.querySelector('.intro').classList.add('seen');
     sessionStorage.setItem('portfolio-intro', '1');
@@ -76,6 +134,18 @@
   let lastTime = 0;
   let moved = false;
   const step = 360 / projects.length;
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+  const heroArt = document.querySelector('.hero-art');
+  const portrait = document.querySelector('.portrait-frame');
+  if (finePointer.matches && !motion.matches && heroArt && portrait) {
+    heroArt.addEventListener('pointermove', (event) => {
+      const rect = heroArt.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - .5;
+      const y = (event.clientY - rect.top) / rect.height - .5;
+      portrait.style.transform = `perspective(900px) rotateY(${x * 18}deg) rotateX(${-y * 14}deg) translateZ(8px)`;
+    });
+    heroArt.addEventListener('pointerleave', () => { portrait.style.transform = ''; });
+  }
   function cover(project) {
     const result = document.createElement('div');
     result.className = `card-art art-${project.art}`;
@@ -174,7 +244,7 @@
     $('dialog-title').textContent = project.title;
     $('dialog-category').textContent = project.category;
     $('dialog-description').textContent = project.detail;
-    $('dialog-link').href = `https://github.com/aniketsidhu123/${project.repo}`;
+    $('dialog-link').href = project.repo.startsWith('https://') ? project.repo : `https://github.com/aniketsidhu123/${project.repo}`;
     $('dialog-art').replaceChildren(cover(project));
     tagsInto($('dialog-tags'), project.tags);
     dialog.showModal(); document.body.classList.add('modal-open');
