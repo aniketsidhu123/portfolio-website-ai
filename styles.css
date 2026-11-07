@@ -2130,3 +2130,44 @@ dialog { background:#0e1420;color:#edf3ff;border-color:#34455f;box-shadow:0 35px
 @media(prefers-reduced-motion:reduce) { .hero-art,.eclipse,.orbital-line,.scan-eye i,.status-dot,.metallic { animation:none!important; } }
 /* Keep the spectral fill clipped to glyphs across Chromium and WebKit. */
 .hero .metallic { -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
+
+/* Hero signal core: a light-weight CSS 3D instrument around the GitHub avatar. */
+.hero-art { perspective:1100px; transform-style:preserve-3d; }
+.signal-scene { position:absolute; inset:0; z-index:1; pointer-events:none; transform-style:preserve-3d; transform:perspective(1100px) rotateX(var(--signal-tilt-y,0deg)) rotateY(var(--signal-tilt-x,0deg)); transition:transform .55s cubic-bezier(.2,.7,.2,1); }
+.signal-halo { position:absolute; left:50%; top:50%; width:clamp(180px,22vw,280px); aspect-ratio:1; border-radius:50%; transform:translate(-50%,-50%) translateZ(-28px); background:radial-gradient(circle,#79eaff18 0,#6988ff0c 43%,transparent 72%); filter:blur(2px); }
+.signal-orbit { position:absolute; left:50%; top:50%; display:block; border:1px solid #7bdbff65; border-radius:50%; transform-style:preserve-3d; box-shadow:0 0 18px #69dfff14,inset 0 0 18px #69dfff0a; }
+.signal-orbit--equator { width:min(460px,96%); height:clamp(116px,14vw,170px); border-color:#82eaff68; transform:translate(-50%,-50%) rotateX(69deg) rotateZ(-15deg); }
+.signal-orbit--meridian { width:min(390px,84%); height:clamp(124px,15vw,184px); border-color:#9d91ff68; transform:translate(-50%,-50%) rotateY(66deg) rotateZ(32deg); }
+.signal-orbit--inclined { width:min(420px,91%); height:clamp(105px,12vw,148px); border-color:#8fbaff55; transform:translate(-50%,-50%) rotateX(56deg) rotateY(-29deg) rotateZ(38deg); }
+.signal-beacon { position:absolute; left:50%; top:0; width:7px; height:7px; border:1px solid #e5fbff; border-radius:50%; background:#72eaff; box-shadow:0 0 8px 2px #68dfffba,0 0 20px #68dfff85; transform:translate(-50%,-50%) translateZ(2px); }
+.signal-orbit--meridian .signal-beacon { background:#b2a6ff; box-shadow:0 0 8px 2px #a294ffba,0 0 20px #9886ff85; }
+.signal-orbit--inclined .signal-beacon { width:5px; height:5px; background:#d6efff; }
+.signal-readout { position:absolute; z-index:1; color:#b9d4e8; font:600 7px/1.4 "Plus Jakarta Sans",sans-serif; letter-spacing:.16em; white-space:nowrap; text-shadow:0 0 12px #73dfff80; }
+.signal-readout--top { top:12%; left:13%; transform:translateZ(30px); }
+.signal-readout--top i { display:inline-block; width:5px; height:5px; margin-left:5px; border-radius:50%; background:#75edcf; box-shadow:0 0 10px #75edcf; vertical-align:1px; }
+.signal-readout--bottom { right:10%; bottom:13%; color:#a7a3df; transform:translateZ(24px); }
+.portrait-frame { z-index:2; }
+.object-coordinate { z-index:3; }
+@media(prefers-reduced-motion:no-preference) {
+ .signal-orbit--equator { animation:signal-orbit-a 42s linear infinite; }
+ .signal-orbit--meridian { animation:signal-orbit-b 56s linear infinite reverse; }
+ .signal-orbit--inclined { animation:signal-orbit-c 68s linear infinite; }
+ .signal-beacon { animation:signal-beacon 3.2s ease-in-out infinite alternate; }
+ .signal-orbit--meridian .signal-beacon { animation-delay:-1.3s; }
+ .signal-orbit--inclined .signal-beacon { animation-delay:-2.1s; }
+}
+@keyframes signal-orbit-a { to { transform:translate(-50%,-50%) rotateX(69deg) rotateZ(345deg); } }
+@keyframes signal-orbit-b { to { transform:translate(-50%,-50%) rotateY(66deg) rotateZ(392deg); } }
+@keyframes signal-orbit-c { to { transform:translate(-50%,-50%) rotateX(56deg) rotateY(-29deg) rotateZ(398deg); } }
+@keyframes signal-beacon { to { box-shadow:0 0 12px 3px #68dfffdf,0 0 26px #68dfffaa; } }
+@media(max-width:760px) {
+ .signal-orbit--equator { width:94%; height:122px; }
+ .signal-orbit--meridian { width:80%; height:135px; }
+ .signal-orbit--inclined { width:88%; height:110px; }
+ .signal-readout--top { top:9%; left:7%; }
+ .signal-readout--bottom { right:5%; bottom:9%; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .signal-scene { transform:none; }
+ .signal-orbit { animation:none!important; }
+}

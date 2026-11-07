@@ -137,14 +137,21 @@
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const heroArt = document.querySelector('.hero-art');
   const portrait = document.querySelector('.portrait-frame');
-  if (finePointer.matches && !motion.matches && heroArt && portrait) {
+  const signalScene = document.querySelector('.signal-scene');
+  if (finePointer.matches && !motion.matches && heroArt && portrait && signalScene) {
     heroArt.addEventListener('pointermove', (event) => {
       const rect = heroArt.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width - .5;
       const y = (event.clientY - rect.top) / rect.height - .5;
+      signalScene.style.setProperty('--signal-tilt-x', `${x * 10}deg`);
+      signalScene.style.setProperty('--signal-tilt-y', `${-y * 7}deg`);
       portrait.style.transform = `perspective(900px) rotateY(${x * 18}deg) rotateX(${-y * 14}deg) translateZ(8px)`;
     });
-    heroArt.addEventListener('pointerleave', () => { portrait.style.transform = ''; });
+    heroArt.addEventListener('pointerleave', () => {
+      signalScene.style.removeProperty('--signal-tilt-x');
+      signalScene.style.removeProperty('--signal-tilt-y');
+      portrait.style.transform = '';
+    });
   }
   function cover(project) {
     const result = document.createElement('div');
