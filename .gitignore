@@ -1,12 +1,13 @@
-# Python
+# ==============================================================================
+# Python & Bytecode
+# ==============================================================================
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
+
+# C extensions & Packaging
 build/
 develop-eggs/
 dist/
@@ -19,54 +20,111 @@ parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
 
-# Virtual Environment
+# ==============================================================================
+# Python Virtual Environments
+# ==============================================================================
+.venv/
 .venv
 .venv.backup-*/
 venv/
+ENV/
+env/
+env.bak/
+venv.bak/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-*.sublime-project
-*.sublime-workspace
-
-# Environment variables
+# ==============================================================================
+# Secrets & Environment Variables
+# ==============================================================================
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 .streamlit/secrets.toml
+secrets.toml
+*.secrets.toml
 
-# OS
-.DS_Store
-Thumbs.db
-.windows-build-tools/
-
-# Streamlit
+# Streamlit Local Cache & Logs
 .streamlit/cache/
 .streamlit/lib/
 .streamlit/streamlit_analytics.json
 .streamlit/logs/
 
-# Project-specific
+# ==============================================================================
+# Node.js & Package Managers
+# ==============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+.npm/
+.eslintcache
+
+# ==============================================================================
+# IDEs & Text Editors
+# ==============================================================================
+.idea/
+.vscode/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*.sw?
+*~
+.fleet/
+.zed/
+
+# ==============================================================================
+# Operating System Files
+# ==============================================================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+ehthumbs.db
+ehthumbs_vista.db
+Thumbs.db
+Thumbs.db:encryptable
+desktop.ini
+$RECYCLE.BIN/
+.windows-build-tools/
+
+# ==============================================================================
+# Temporary Files, Logs & Diagnostics
+# ==============================================================================
 *.log
+logs/
 temp/
 tmp/
+*.tmp
 *.bak
-*.swp
 
-# Testing
+# ==============================================================================
+# Testing & Coverage
+# ==============================================================================
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
+.nyc_output/
 
-# Distribution
+# ==============================================================================
+# Distribution & Archives
+# ==============================================================================
 *.zip
 *.tar.gz
+*.tgz
+*.rar
+*.7z

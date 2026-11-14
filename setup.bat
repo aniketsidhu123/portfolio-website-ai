@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions DisableDelayedExpansion
 set "SETUP_NO_PAUSE="
-if /I "%~1"=="--no-pause" set "SETUP_NO_PAUSE=1"
+for %%A in (%*) do if /I "%%~A"=="--no-pause" set "SETUP_NO_PAUSE=1"
 pushd "%~dp0" >nul 2>&1
 if errorlevel 1 goto directory_error
 
@@ -13,47 +13,59 @@ if not exist "requirements.txt" (
     goto failed
 )
 
-rem Prefer an existing working environment, including its Python version.
+rem Reuse only an actual working Python 3.11+ virtual environment.
 if exist ".venv\Scripts\python.exe" (
-    ".venv\Scripts\python.exe" -c "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
+    ".venv\Scripts\python.exe" -c "import sys; sys.exit(0 if sys.version_info >= (3, 11) and sys.prefix != sys.base_prefix else 1)" >nul 2>&1
     if not errorlevel 1 goto install_dependencies
 )
 
-rem Probe actual interpreters, not just PATH entries or Microsoft Store aliases.
-set "PORTFOLIO_PYTHON="
-py -3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
-if not errorlevel 1 (
-    set "PORTFOLIO_PYTHON=py -3"
-    goto create_environment
+rem An optional override is one interpreter path, without command-line arguments.
+set "PORTFOLIO_PYTHON_ARGS="
+if defined PORTFOLIO_PYTHON (
+    call :probe_python
+    if not errorlevel 1 goto create_environment
 )
-python -c "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
-if not errorlevel 1 (
-    set "PORTFOLIO_PYTHON=python"
-    goto create_environment
+set "PORTFOLIO_PYTHON=py"
+set "PORTFOLIO_PYTHON_ARGS=-3"
+call :probe_python
+if not errorlevel 1 goto create_environment
+
+rem Store aliases can be stale even when the real installation is healthy.
+rem PEP 514 registry entries point to the actual installed interpreter.
+set "PORTFOLIO_PYTHON_ARGS="
+for %%R in (HKCU HKLM) do (
+    for %%V in (64 32) do (
+        for /f "tokens=2,*" %%A in ('reg query "%%R\Software\Python" /s /v ExecutablePath /reg:%%V 2^>nul ^| findstr /c:"REG_SZ"') do (
+            set "PORTFOLIO_PYTHON=%%B"
+            call :probe_python
+            if not errorlevel 1 goto create_environment
+        )
+    )
 )
-python3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
-if not errorlevel 1 (
-    set "PORTFOLIO_PYTHON=python3"
-    goto create_environment
+for %%P in (python python3) do (
+    set "PORTFOLIO_PYTHON=%%P"
+    call :probe_python
+    if not errorlevel 1 goto create_environment
 )
 echo [ERROR] A working Python 3.11 or newer installation was not found.
 echo Install Python from https://www.python.org/downloads/windows/
-echo Enable the Python launcher or add Python to PATH, then run setup.bat again.
+echo Then run setup.bat again, or set PORTFOLIO_PYTHON to python.exe's full path.
 goto failed
 
 :create_environment
+echo [OK] Found Python: "%PORTFOLIO_PYTHON%"
 if not exist ".venv" goto new_environment
 echo Preserving the unusable environment in a .venv.backup-* folder...
-rem Verify resolved source and destination stay directly inside this project.
-%PORTFOLIO_PYTHON% -c "from pathlib import Path; from uuid import uuid4; root=Path.cwd().resolve(); source=(root/'.venv').resolve(); target=root/('.venv.backup-'+uuid4().hex[:12]); assert source.parent == root and source.name == '.venv' and target.parent == root, 'Environment path is outside this project'; source.rename(target)"
+rem Resolve both paths and refuse any environment outside this checkout.
+"%PORTFOLIO_PYTHON%" %PORTFOLIO_PYTHON_ARGS% -c "from pathlib import Path; from uuid import uuid4; root=Path.cwd().resolve(); source=(root/'.venv').resolve(); target=root/('.venv.backup-'+uuid4().hex[:12]); assert source.parent == root and source.name == '.venv' and target.parent == root, 'Environment path is outside this project'; source.rename(target)"
 if errorlevel 1 (
-    echo [ERROR] Could not back up the existing environment. No files were deleted.
+    echo [ERROR] Could not preserve the old environment. No files were deleted.
     goto failed
 )
 
 :new_environment
 echo Creating .venv...
-%PORTFOLIO_PYTHON% -m venv .venv
+"%PORTFOLIO_PYTHON%" %PORTFOLIO_PYTHON_ARGS% -m venv .venv
 if errorlevel 1 (
     echo [ERROR] Could not create the virtual environment.
     goto failed
@@ -61,10 +73,10 @@ if errorlevel 1 (
 
 :install_dependencies
 echo Installing dependencies from requirements.txt...
-".venv\Scripts\python.exe" -m pip install -r requirements.txt
+".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -r requirements.txt
 if errorlevel 1 (
-    echo [ERROR] Dependency installation failed. Check the output and your internet connection.
-    echo You can safely run setup.bat again to retry.
+    echo [ERROR] Dependency installation failed. Check your internet connection.
+    echo Run setup.bat again to retry.
     goto failed
 )
 ".venv\Scripts\python.exe" -c "import flask; from google import genai" >nul 2>&1
@@ -79,7 +91,6 @@ if not exist ".streamlit" (
     goto failed
 )
 if exist ".streamlit\secrets.toml" goto ready
-rem Empty optional settings avoid treating example credentials as real keys.
 >".streamlit\secrets.toml" echo # Optional local settings. Never commit this file.
 >>".streamlit\secrets.toml" echo GEMINI_API_KEY = ""
 >>".streamlit\secrets.toml" echo FORMSPREE_ENDPOINT = ""
@@ -89,14 +100,19 @@ if errorlevel 1 (
 )
 
 :ready
+".venv\Scripts\python.exe" -u runtime_check.py
+if errorlevel 1 goto failed
 echo.
-echo [OK] Setup complete. Run run.bat to start the portfolio.
-echo Optional: set GEMINI_API_KEY and FORMSPREE_ENDPOINT in the environment
-echo or edit .streamlit\secrets.toml to enable AI chat and contact delivery.
-echo Existing settings have been preserved.
+echo [OK] Setup complete. Run run.bat to start the updated portfolio.
+echo Use run.bat --check-ai --no-pause to verify a live Gemini response.
+echo Existing local settings have been preserved.
 popd
 if not defined SETUP_NO_PAUSE pause
 exit /b 0
+
+:probe_python
+"%PORTFOLIO_PYTHON%" %PORTFOLIO_PYTHON_ARGS% -c "import sys,venv,ensurepip; sys.exit(0 if sys.version_info >= (3, 11) else 1)" >nul 2>&1
+exit /b %ERRORLEVEL%
 
 :failed
 popd

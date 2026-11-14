@@ -1,10 +1,10 @@
 {
   "name": "aniket-sidhu-portfolio",
   "private": true,
-  "version": "3.0.0",
-  "description": "Editorial portfolio with a Flask-backed AI assistant",
+  "version": "4.0.0",
+  "description": "Video-reference keyboard portfolio with a Flask-backed AI assistant",
   "scripts": {
     "start": "node preview.mjs",
-    "check": "node --check script.js && node --check projects.js && node --check preview.mjs"
+    "check": "node --check script.js && node --check projects.js && node --check github-data.js && node --check details.js && node --check preview.mjs"
   }
 }
