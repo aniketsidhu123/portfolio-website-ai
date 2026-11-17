@@ -29,7 +29,7 @@ def main() -> int:
         return 1
     print(f"[OK] Python {sys.version.split()[0]} | Flask {version('flask')} | Google GenAI {version('google-genai')}")
     print("[OK] Updated portfolio files and backend are ready.")
-    model = getattr(server, "GEMINI_MODEL", "gemini-3.6-flash")
+    model = getattr(server, "GEMINI_MODEL", "gemini-3.5-flash-lite")
     if not server.GEMINI_API_KEY:
         print("[INFO] Gemini is not configured. Set GEMINI_API_KEY in the environment or .streamlit/secrets.toml.")
         return 1 if args.gemini else 0

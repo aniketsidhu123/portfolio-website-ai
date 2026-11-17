@@ -18,6 +18,7 @@ import time
 import tomllib
 
 from flask import Flask, abort, jsonify, request, send_from_directory
+from public_assets import PUBLIC_FILES, PUBLIC_ROOT
 
 # ---------------------------------------------------------------------------
 # Gemini SDK (optional — chat works only when available + API key configured)
@@ -37,6 +38,8 @@ _configuration_error = None
 
 def _load_secrets_toml() -> dict:
     """Read key-value pairs from .streamlit/secrets.toml (if it exists)."""
+    if os.getenv("VERCEL") == "1":
+        return {}
     path = os.path.join(os.path.dirname(__file__), ".streamlit", "secrets.toml")
     data: dict = {}
     if not os.path.isfile(path):
@@ -59,7 +62,7 @@ def _get_secret(name: str) -> str | None:
 
 
 GEMINI_API_KEY = _get_secret("GEMINI_API_KEY")
-GEMINI_MODEL = _get_secret("GEMINI_MODEL") or "gemini-3.6-flash"
+GEMINI_MODEL = _get_secret("GEMINI_MODEL") or "gemini-3.5-flash-lite"
 FORMSPREE_ENDPOINT = _get_secret("FORMSPREE_ENDPOINT")
 
 # ---------------------------------------------------------------------------
@@ -168,14 +171,14 @@ Keep responses short by default. Provide more detail only when the visitor asks 
 # ---------------------------------------------------------------------------
 app = Flask(__name__, static_folder=None)
 app.config["MAX_CONTENT_LENGTH"] = 32 * 1024
-PUBLIC_ROOT = os.path.dirname(os.path.abspath(__file__))
-PUBLIC_FILES = {
-    "index.html", "styles.css", "script.js", "projects.js", "github-data.js", "details.js",
-    "assets/favicon.svg", "assets/aniket-github.png",
-    "assets/signal-scene.mp4", "assets/signal-scene-poster.jpg",
-    "assets/space-grotesk-latin.woff2", "assets/unbounded-latin.woff2",
-    "assets/key-press.mp3", "assets/key-release.mp3",
-}
+
+
+@app.after_request
+def response_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    if request.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 @app.route("/")

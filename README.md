@@ -13,6 +13,7 @@ A local, buildless developer portfolio rebuilt around the 14 November 2026 video
   - [Manual Setup (macOS / Linux / Windows)](#manual-setup-macos--linux--windows)
   - [Frontend-Only Preview (Zero Dependencies)](#frontend-only-preview-zero-dependencies)
 - [Configuration](#configuration)
+- [Vercel Deployment](#vercel-deployment)
 - [Architecture & Tech Stack](#architecture--tech-stack)
 - [API Endpoints](#api-endpoints)
 - [Project Structure](#project-structure)
@@ -28,7 +29,7 @@ The portfolio presents a cyberpunk aesthetic centered on physical interaction:
 - **Interactive CSS 3D Keyboard**: Six physical keycaps rendered with perspective transforms, tactile depression animations, and authentic mechanical switch audio.
 - **Signal-Driven Exploration**: Selecting a language or tool key updates the dynamic signal display and filters the narrative trail into the projects below.
 - **Dual-Layer GitHub Integration**: Ships with a bundled offline snapshot (`github-data.js`) for instant zero-latency rendering, paired with non-blocking live API refreshes and a 30-minute client-side cache.
-- **Integrated AI Assistant**: Context-aware portfolio assistant built on Google GenAI (`gemini-3.6-flash`), with safety boundaries, conversational memory, and strict adherence to verified profile facts.
+- **Integrated AI Assistant**: Context-aware portfolio assistant built on Google GenAI (`gemini-3.5-flash-lite`), with safety boundaries, conversational memory, and strict adherence to verified profile facts.
 
 ---
 
@@ -127,19 +128,25 @@ Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml`:
 ```toml
 # .streamlit/secrets.toml (Ignored by git - Never commit real keys)
 GEMINI_API_KEY = "your-gemini-api-key"
-GEMINI_MODEL = "gemini-3.6-flash"
+GEMINI_MODEL = "gemini-3.5-flash-lite"
 FORMSPREE_ENDPOINT = "https://formspree.io/f/your-form-id"
 ```
 
 | Variable | Description | Default |
 |---|---|---|
 | `GEMINI_API_KEY` | Google Gemini API key for assistant chat. If omitted, assistant states that chat is offline. | `None` |
-| `GEMINI_MODEL` | Gemini model identifier used for conversation generation. | `gemini-3.6-flash` |
+| `GEMINI_MODEL` | Gemini model identifier used for conversation generation. | `gemini-3.5-flash-lite` |
 | `FORMSPREE_ENDPOINT` | Formspree endpoint URL for routing contact form submissions. | `""` |
 | `PORTFOLIO_PYTHON` | *(Windows launcher only)* Absolute path to `python.exe` override. | Auto-detected |
 | `PORT` | *(Node preview only)* Custom port for `preview.mjs`. | `4173` |
 
 ---
+
+## Vercel Deployment
+
+The project includes native Flask configuration, a Python 3.12 version pin, and a build step that prepares the approved frontend files in `public/` for CDN delivery. The Gemini API stays on the same domain as the website.
+
+Follow [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for the GitHub import steps, environment variables, deployment checks, and troubleshooting. Configure `GEMINI_API_KEY` in Vercel before deploying; local secrets are excluded. The generated `public/` directory is not committed.
 
 ## Architecture & Tech Stack
 
@@ -169,7 +176,7 @@ FORMSPREE_ENDPOINT = "https://formspree.io/f/your-form-id"
 ┌─────────────────────────────────┐
 │ Google Gemini API               │
 │ - SDK: google-genai             │
-│ - Model: gemini-3.6-flash       │
+│ - Model: gemini-3.5-flash-lite       │
 │ - Strict persona constraints    │
 │ - Safe error mapping & timeout  │
 └─────────────────────────────────┘

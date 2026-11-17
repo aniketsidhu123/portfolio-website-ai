@@ -128,3 +128,7 @@ htmlcov/
 *.tgz
 *.rar
 *.7z
+
+# Vercel local linkage and generated CDN output
+.vercel/
+public/

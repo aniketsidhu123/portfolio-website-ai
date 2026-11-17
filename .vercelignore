@@ -1,0 +1,26 @@
+# Local environments and credentials are never deployment inputs.
+.git/
+.vercel/
+.venv/
+.venv.backup-*/
+venv/
+env/
+ENV/
+.streamlit/
+.env
+.env.*
+!.env.example
+*.secrets.toml
+secrets.toml
+node_modules/
+**/__pycache__/
+*.pyc
+tmp/
+temp/
+logs/
+*.log
+.pytest_cache/
+.coverage*
+htmlcov/
+# Recreated on Vercel by prepare_vercel.py.
+public/
