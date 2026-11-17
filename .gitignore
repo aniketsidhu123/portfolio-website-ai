@@ -1,134 +1,82 @@
-# ==============================================================================
-# Python & Bytecode
-# ==============================================================================
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-
-# C extensions & Packaging
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# ==============================================================================
-# Python Virtual Environments
-# ==============================================================================
-.venv/
-.venv
-.venv.backup-*/
-venv/
-ENV/
-env/
-env.bak/
-venv.bak/
-
-# ==============================================================================
-# Secrets & Environment Variables
-# ==============================================================================
+# Local configuration and secrets
 .env
 .env.*
 !.env.example
-.streamlit/secrets.toml
+.streamlit/*
+!.streamlit/secrets.toml.example
 secrets.toml
 *.secrets.toml
 
-# Streamlit Local Cache & Logs
-.streamlit/cache/
-.streamlit/lib/
-.streamlit/streamlit_analytics.json
-.streamlit/logs/
+# Python environments and generated files
+.venv/
+.venv.backup-*/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+__pycache__/
+*.py[cod]
+.Python
+build/
+dist/
+.eggs/
+*.egg-info/
 
-# ==============================================================================
-# Node.js & Package Managers
-# ==============================================================================
+# Node.js dependencies and caches
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 .pnpm-store/
 .npm/
+*.tsbuildinfo
 .eslintcache
 
-# ==============================================================================
-# IDEs & Text Editors
-# ==============================================================================
+# Vercel local metadata and generated CDN assets
+/.vercel/
+/public/
+
+# Test and analysis output
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+coverage/
+htmlcov/
+.nyc_output/
+
+# Local tooling and editor files
 .idea/
 .vscode/
+.fleet/
+.zed/
 *.code-workspace
 *.sublime-project
 *.sublime-workspace
 *.swp
 *.swo
-*.sw?
 *~
-.fleet/
-.zed/
 
-# ==============================================================================
-# Operating System Files
-# ==============================================================================
-# macOS
+# Temporary files and logs
+tmp/
+temp/
+logs/
+*.log
+*.tmp
+*.bak
+
+# Operating system files
 .DS_Store
-.DS_Store?
 ._*
-.Spotlight-V100
-.Trashes
-
-# Windows
+Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
-Thumbs.db
-Thumbs.db:encryptable
 desktop.ini
 $RECYCLE.BIN/
 .windows-build-tools/
 
-# ==============================================================================
-# Temporary Files, Logs & Diagnostics
-# ==============================================================================
-*.log
-logs/
-temp/
-tmp/
-*.tmp
-*.bak
-
-# ==============================================================================
-# Testing & Coverage
-# ==============================================================================
-.pytest_cache/
-.coverage
-.coverage.*
-htmlcov/
-.nyc_output/
-
-# ==============================================================================
-# Distribution & Archives
-# ==============================================================================
+# Local archives
 *.zip
 *.tar.gz
 *.tgz
 *.rar
 *.7z
-
-# Vercel local linkage and generated CDN output
-.vercel/
-public/
